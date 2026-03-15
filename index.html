@@ -91,8 +91,8 @@ body{background:#0e0e0e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .sht-st{font-size:10px;margin-top:4px;}.sht-st.active{color:#00d4aa99;}.sht-st.closed{color:#60606099;}.sht-st.pending{color:#f59e0b99;}
 /* Mobile */
 @media(max-width:560px){
-  body{padding:0;margin:0;align-items:stretch;justify-content:flex-start;min-height:100vh;min-height:100dvh;}
-  .mv{border-radius:0;width:100vw;max-width:100vw;height:100vh;height:100dvh;box-shadow:none;}
+  body{padding:0;margin:0;align-items:flex-start;justify-content:flex-start;}
+  .mv{border-radius:0;width:100vw;max-width:100vw;height:100vh;box-shadow:none;}
   .mv-hd{padding:14px 16px 10px;}
   .mv-tabs{padding:0 16px;}
   .mv-pick{display:flex;}
@@ -144,15 +144,20 @@ body{background:#0e0e0e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 </div>
 
 <script>
-// Force full height on mobile
+// Force full height on mobile using CSS variable
 function setHeight(){
-  if(window.innerWidth<=560){
-    document.querySelector('.mv').style.height = window.innerHeight + 'px';
+  const h = window.innerHeight;
+  document.documentElement.style.setProperty('--app-h', h + 'px');
+  if(window.innerWidth <= 560){
+    document.querySelector('.mv').style.height = h + 'px';
+    document.body.style.minHeight = h + 'px';
   }
 }
 setHeight();
 window.addEventListener('resize', setHeight);
-window.addEventListener('orientationchange', function(){ setTimeout(setHeight, 100); });
+window.addEventListener('orientationchange', function(){ setTimeout(setHeight, 200); });
+// iOS Safari address bar fix
+window.addEventListener('scroll', function(){ if(window.innerWidth<=560) setHeight(); });
 
 const KEY='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';
 const SPACE='bitdao.eth';
@@ -326,6 +331,7 @@ async function load(state){
   }
 }
 load('active');
+
 </script>
 </body>
 </html>
