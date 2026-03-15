@@ -11,13 +11,11 @@ module.exports = async function handler(req, res) {
 
   try {
     const { system, messages } = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-
-    // Combine system prompt and user message for Gemini
     const userMsg = messages[messages.length - 1].content;
     const prompt = system ? `${system}\n\n${userMsg}` : userMsg;
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -35,7 +33,6 @@ module.exports = async function handler(req, res) {
       return res.status(response.status).json({ error: data.error?.message || 'Gemini error' });
     }
 
-    // Format response to match Anthropic format so frontend works unchanged
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
     return res.status(200).json({
       content: [{ type: 'text', text }]
