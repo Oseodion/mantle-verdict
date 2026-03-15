@@ -16,11 +16,11 @@ Mantle governance proposals are long, technical, and written for insiders. Most 
 
 Mantle Verdict makes every proposal accessible to everyone:
 
-- **AI Breakdown** — plain English summary of what the proposal actually wants to do
-- **If it passes / If it fails** — clear consequences on both sides
-- **Live vote data** — real-time vote distribution pulled from Snapshot
-- **Ask AI a question** — chat with AI scoped to the specific proposal you're reading
-- **Vote on Snapshot** — one tap to go cast your real vote
+- **AI Breakdown** - plain English summary of what the proposal actually wants to do
+- **If it passes / If it fails** - clear consequences on both sides
+- **Live vote data** - real-time vote distribution pulled from Snapshot
+- **Ask AI a question** - chat with AI scoped to the specific proposal you're reading
+- **Vote on Snapshot** - one tap to go cast your real vote
 
 ## How It Works
 
@@ -35,10 +35,10 @@ Snapshot GraphQL API → Live proposals → Claude AI → Plain English breakdow
 
 ## Tech Stack
 
-- **Frontend** — Vanilla HTML, CSS, JavaScript. No frameworks, no build step
-- **AI** — Anthropic API (claude-haiku) with direct browser access
-- **Governance data** — Snapshot GraphQL API (free, no API key needed)
-- **Hosting** — GitHub Pages (free)
+- **Frontend** - Vanilla HTML, CSS, JavaScript. No frameworks, no build step
+- **AI** - Anthropic API (claude-haiku) with direct browser access
+- **Governance data** - Snapshot GraphQL API (free, no API key needed)
+- **Hosting** - GitHub Pages (free)
 
 ## Setup
 
