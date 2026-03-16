@@ -262,7 +262,7 @@ async function doAI(p){
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-haiku-4-5-20251001',max_tokens:500,
+        model:'claude-3-5-haiku-20241022',max_tokens:500,
         system:'Output ONLY a JSON object with keys summary, forText, againstText. No other text.',
         messages:[{role:'user',content:`Governance proposal:\nTitle: ${p.title}\nBody: ${body}\n\nJSON response:`}]
       })
@@ -300,7 +300,7 @@ async function doChat(){
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-haiku-4-5-20251001',max_tokens:400,
+        model:'claude-3-5-haiku-20241022',max_tokens:400,
         system:`You are Verdict AI. Answer questions about: "${cur.title}". Context: ${strip(cur.body||'').slice(0,600)}. 2-4 plain sentences. No markdown.`,
         messages:hist
       })
