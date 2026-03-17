@@ -33,7 +33,7 @@ Snapshot GraphQL API → Live proposals → Vercel Serverless API → Claude AI 
 
 ## Tech Stack
 
-- **Frontend** — Vanilla HTML, CSS, JavaScript (no frameworks)
+- **Frontend** — Vanilla HTML, CSS, JavaScript (no frameworks, no build step)
 - **AI** — Anthropic API (Claude Haiku), called **server-side** via Vercel Serverless Function (`/api/chat`)
 - **Governance data** — Snapshot GraphQL API (proxied server-side via `/api/snapshot`)
 - **Hosting** — Vercel
@@ -85,4 +85,3 @@ Governance is one of the most important and most underserved areas in any blockc
 ---
 
 Built with Claude AI · Data from [Mantle Governance](https://snapshot.org/#/bitdao.eth)
-

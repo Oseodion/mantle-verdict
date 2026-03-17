@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>Mantle Verdict</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0e0e0e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;}
+.mv{background:#141414;border-radius:16px;width:100%;max-width:780px;height:680px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.7);}
+.mv-hd{padding:18px 24px 14px;display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;}
+.mv-name{font-size:18px;font-weight:700;color:#f4f4f4;}.mv-name span{color:#00d4aa;}
+.mv-tag{font-size:11px;color:#606060;margin-top:3px;}
+.mv-live{display:flex;align-items:center;gap:6px;font-size:11px;color:#606060;}
+.mv-dot{width:7px;height:7px;border-radius:50%;background:#00d4aa;animation:glow 2s infinite;}
+@keyframes glow{0%,100%{box-shadow:0 0 4px #00d4aa66;}50%{box-shadow:0 0 10px #00d4aacc;}}
+.mv-tabs{display:flex;padding:0 24px;border-bottom:.5px solid #222;flex-shrink:0;}
+.mv-tab{font-size:12px;padding:8px 16px 10px;color:#606060;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-.5px;transition:all .15s;}
+.mv-tab.on{color:#00d4aa;border-bottom-color:#00d4aa;}
+.mv-tab:hover:not(.on){color:#909090;}
+.mv-pick{display:none;padding:10px 16px;border-bottom:.5px solid #1e1e1e;flex-shrink:0;}
+.mv-pbtn{width:100%;background:#1c1c1c;border:.5px solid #2a2a2a;border-radius:10px;padding:11px 14px;color:#c0c0c0;font-size:13px;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:space-between;text-align:left;}
+.mv-parr{color:#505050;font-size:11px;margin-left:8px;flex-shrink:0;}
+.mv-body{flex:1;display:flex;overflow:hidden;}
+.mv-side{width:220px;flex-shrink:0;overflow-y:auto;padding:14px 0;border-right:.5px solid #1e1e1e;scrollbar-width:thin;scrollbar-color:#252525 transparent;}
+.mv-slbl{font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:#505050;padding:0 18px;margin-bottom:10px;}
+.mv-row{padding:11px 18px;cursor:pointer;border-left:2px solid transparent;transition:background .1s;}
+.mv-row:hover{background:#1a1a1a;}.mv-row.on{border-left-color:#00d4aa;background:#1a1a1a;}
+.mv-rid{font-size:9px;color:#505050;letter-spacing:.05em;margin-bottom:3px;}.mv-row.on .mv-rid{color:#00d4aa;}
+.mv-rt{font-size:12px;color:#888;line-height:1.4;}.mv-row.on .mv-rt{color:#c8c8c8;}
+.mv-rst{font-size:10px;margin-top:4px;}.mv-rst.active{color:#00d4aa99;}.mv-rst.closed{color:#60606099;}.mv-rst.pending{color:#f59e0b99;}
+.mv-sk{padding:11px 18px;}.mv-skb{background:#1e1e1e;border-radius:3px;animation:sh 1.4s infinite;}
+.mv-ski{height:8px;width:38px;margin-bottom:6px;}.mv-skt{height:10px;width:88%;margin-bottom:4px;}.mv-skt2{height:10px;width:65%;margin-bottom:6px;}.mv-sks{height:8px;width:50px;}
+@keyframes sh{0%,100%{opacity:.35;}50%{opacity:.7;}}
+.mv-main{flex:1;overflow-y:auto;padding:22px 26px;display:flex;flex-direction:column;gap:20px;scrollbar-width:thin;scrollbar-color:#252525 transparent;}
+.mv-spin{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;color:#505050;font-size:13px;}
+.mv-dots{display:flex;gap:5px;}.mv-d{width:7px;height:7px;border-radius:50%;background:#00d4aa;animation:bop 1.2s infinite;opacity:.4;}
+.mv-d:nth-child(2){animation-delay:.2s;}.mv-d:nth-child(3){animation-delay:.4s;}
+@keyframes bop{0%,60%,100%{transform:translateY(0);opacity:.35;}30%{transform:translateY(-5px);opacity:1;}}
+.mv-pid{font-size:10px;color:#00d4aa;letter-spacing:.07em;text-transform:uppercase;}
+.mv-ptitle{font-size:17px;font-weight:700;color:#f0f0f0;line-height:1.4;margin-top:5px;}
+.mv-div{height:.5px;background:#222;}
+.mv-lbl{font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:#00d4aa;margin-bottom:8px;}
+.mv-txt{font-size:13px;color:#909090;line-height:1.75;}
+.mv-gen{display:flex;align-items:center;gap:8px;font-size:12px;color:#505050;}
+.mv-stakes{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+.mv-slb{font-size:9px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px;}
+.mv-fc{color:#00d4aa;}.mv-ac{color:#f87171;}
+.mv-stxt{font-size:13px;color:#787878;line-height:1.65;}
+.mv-vlbl{font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:#505050;margin-bottom:8px;}
+.mv-bar{height:2px;background:#252525;border-radius:2px;overflow:hidden;}
+.mv-barf{height:100%;background:#00d4aa;border-radius:2px;transition:width .8s ease;}
+.mv-bnum{display:flex;justify-content:space-between;font-size:11px;margin-top:6px;}
+.mv-bf{color:#00d4aa;}.mv-ba{color:#f87171;}
+.mv-bt{font-size:11px;color:#505050;margin-top:5px;}.mv-bv{font-size:11px;color:#404040;margin-top:3px;}
+.mv-acts{display:flex;gap:10px;align-items:center;}
+.mv-vbtn{padding:10px 22px;border-radius:8px;background:#00d4aa;color:#040404;font-size:13px;font-weight:600;border:none;cursor:pointer;transition:background .15s,transform .1s;}
+.mv-vbtn:hover{background:#00c49c;transform:scale(1.02);}.mv-vbtn:active{transform:scale(.98);}
+.mv-abtn{padding:10px 18px;border-radius:8px;background:transparent;color:#787878;font-size:13px;border:.5px solid #303030;cursor:pointer;transition:all .15s;}
+.mv-abtn:hover{color:#a0a0a0;border-color:#484848;}
+.mv-chat{display:none;flex-direction:column;border-top:.5px solid #222;margin-top:4px;}
+.mv-chat.on{display:flex;}
+.mv-cmsgs{max-height:170px;overflow-y:auto;padding:12px 0 8px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:#252525 transparent;}
+.mv-cu{align-self:flex-end;font-size:13px;color:#909090;background:#1e1e1e;padding:8px 13px;border-radius:10px 10px 3px 10px;max-width:80%;line-height:1.5;}
+.mv-ca{align-self:flex-start;font-size:13px;color:#787878;line-height:1.65;max-width:92%;}
+.mv-cal{font-size:9px;color:#00d4aa;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;}
+.mv-cdots{display:inline-flex;gap:3px;padding:4px 0;}
+.mv-cdots span{width:5px;height:5px;border-radius:50%;background:#00d4aa;animation:bop 1.2s infinite;opacity:.4;}
+.mv-cdots span:nth-child(2){animation-delay:.2s;}.mv-cdots span:nth-child(3){animation-delay:.4s;}
+.mv-crow{display:flex;gap:8px;align-items:center;padding-top:10px;}
+.mv-ci{flex:1;background:transparent;border:none;border-bottom:.5px solid #2a2a2a;padding:7px 0;font-size:13px;color:#909090;outline:none;font-family:inherit;transition:border-color .15s;}
+.mv-ci::placeholder{color:#404040;}.mv-ci:focus{border-bottom-color:#00d4aa55;}
+.mv-cs{width:30px;height:30px;border-radius:7px;background:#00d4aa;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;}
+.mv-cs:hover{background:#00c49c;}.mv-cs:disabled{background:#1a3530;cursor:not-allowed;}
+.mv-ft{padding:8px 24px;border-top:.5px solid #1c1c1c;text-align:center;font-size:10px;color:#303030;flex-shrink:0;}
+.mv-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px;color:#505050;font-size:13px;text-align:center;padding:20px;}
+.mv-err{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;color:#606060;font-size:13px;text-align:center;padding:20px;}
+.mv-retry{margin-top:8px;padding:8px 20px;border-radius:8px;background:#1e1e1e;color:#909090;font-size:12px;border:.5px solid #2a2a2a;cursor:pointer;}
+/* Sheet */
+.sbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:9000;}
+.sbg.on{display:block;}
+.sht{position:fixed;left:0;right:0;bottom:0;background:#1c1c1c;border-radius:16px 16px 0 0;z-index:9001;max-height:72vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .28s cubic-bezier(.32,.72,0,1);}
+.sht.on{transform:translateY(0);}
+.sht-pill{width:36px;height:4px;background:#383838;border-radius:2px;margin:12px auto 4px;flex-shrink:0;}
+.sht-hd{font-size:10px;color:#505050;letter-spacing:.07em;text-transform:uppercase;padding:6px 18px 10px;flex-shrink:0;}
+.sht-list{overflow-y:auto;padding-bottom:32px;}
+.sht-row{padding:12px 18px;cursor:pointer;border-left:2px solid transparent;transition:background .1s;}
+.sht-row:hover{background:#242424;}.sht-row.on{border-left-color:#00d4aa;background:#222;}
+.sht-id{font-size:9px;color:#505050;letter-spacing:.05em;margin-bottom:3px;}.sht-row.on .sht-id{color:#00d4aa;}
+.sht-t{font-size:13px;color:#888;line-height:1.4;}.sht-row.on .sht-t{color:#c8c8c8;}
+.sht-st{font-size:10px;margin-top:4px;}.sht-st.active{color:#00d4aa99;}.sht-st.closed{color:#60606099;}.sht-st.pending{color:#f59e0b99;}
+/* Mobile */
+@media(max-width:560px){
+  body{padding:0;margin:0;align-items:flex-start;justify-content:flex-start;}
+  .mv{border-radius:0;width:100vw;max-width:100vw;box-shadow:none;}
+  .mv-hd{padding:14px 16px 10px;}
+  .mv-tabs{padding:0 16px;}
+  .mv-pick{display:flex;}
+  .mv-side{display:none;}
+  .mv-main{padding:16px;}
+  .mv-ptitle{font-size:15px;}
+  .mv-stakes{grid-template-columns:1fr;gap:14px;}
+  .mv-acts{flex-direction:column;gap:8px;}
+  .mv-vbtn,.mv-abtn{width:100%;text-align:center;}
+  .mv-ft{display:none;}
+}
+</style>
+</head>
+<body>
+<div class="mv">
+  <div class="mv-hd">
+    <div><div class="mv-name">Mantle <span>Verdict</span></div><div class="mv-tag">Your vote. Your verdict.</div></div>
+    <div class="mv-live"><div class="mv-dot"></div>Live proposals</div>
+  </div>
+  <div class="mv-tabs">
+    <div class="mv-tab on" onclick="go('active',this)">Active</div>
+    <div class="mv-tab" onclick="go('closed',this)">Closed</div>
+    <div class="mv-tab" onclick="go('pending',this)">Pending</div>
+  </div>
+  <div class="mv-pick" id="pk">
+    <button class="mv-pbtn" onclick="openSht()">
+      <span id="pkLbl">Loading...</span><span class="mv-parr">▼</span>
+    </button>
+  </div>
+  <div class="mv-body">
+    <div class="mv-side" id="side">
+      <div class="mv-slbl">Proposals</div>
+      <div class="mv-sk"><div class="mv-skb mv-ski"></div><div class="mv-skb mv-skt"></div><div class="mv-skb mv-skt2"></div><div class="mv-skb mv-sks"></div></div>
+      <div class="mv-sk"><div class="mv-skb mv-ski"></div><div class="mv-skb mv-skt"></div><div class="mv-skb mv-skt2"></div><div class="mv-skb mv-sks"></div></div>
+      <div class="mv-sk"><div class="mv-skb mv-ski"></div><div class="mv-skb mv-skt"></div><div class="mv-skb mv-skt2"></div><div class="mv-skb mv-sks"></div></div>
+    </div>
+    <div class="mv-main" id="main">
+      <div class="mv-spin"><div class="mv-dots"><div class="mv-d"></div><div class="mv-d"></div><div class="mv-d"></div></div><span>Fetching Mantle governance proposals...</span></div>
+    </div>
+  </div>
+  <div class="mv-ft">Powered by Anthropic AI · Data from Mantle Governance (snapshot.org/#/bitdao.eth) · Built for the Mantle community</div>
+</div>
+
+<div class="sbg" id="sbg" onclick="closeSht()"></div>
+<div class="sht" id="sht">
+  <div class="sht-pill"></div>
+  <div class="sht-hd">Select Proposal</div>
+  <div class="sht-list" id="shtList"></div>
+</div>
+
+<script>
+// Set exact height on mobile
+function setH(){
+  const mv = document.querySelector('.mv');
+  if(!mv) return;
+  if(window.innerWidth <= 560){
+    mv.style.height = window.innerHeight + 'px';
+  } else {
+    mv.style.height = '';
+  }
+}
+setH();
+window.addEventListener('resize', setH);
+window.addEventListener('orientationchange', ()=>setTimeout(setH,100));
+
+const API = '/api/chat';
+const SPACE='bitdao.eth';
+const GQL='https://hub.snapshot.org/graphql';
+let props=[],cur=null,hist=[],sidEls=[],shtEls=[];
+
+function openSht(){document.getElementById('sbg').classList.add('on');document.getElementById('sht').classList.add('on');}
+function closeSht(){document.getElementById('sbg').classList.remove('on');document.getElementById('sht').classList.remove('on');}
+
+function strip(t){return(t||'').replace(/#{1,6}\s+/g,'').replace(/\*\*(.+?)\*\*/g,'$1').replace(/\*(.+?)\*/g,'$1').replace(/\[([^\]]+)\]\([^)]+\)/g,'$1').replace(/https?:\/\/\S+/g,'').replace(/`[^`]*`/g,'').replace(/^\s*[-*+]\s+/gm,'').replace(/^\s*\d+\.\s+/gm,'').replace(/\n{3,}/g,'\n\n').replace(/---+/g,'').trim();}
+function sid(id){return id.slice(0,8).toUpperCase();}
+function tl(end){const d=end-Date.now()/1000;if(d<=0)return'Voting ended';const dy=Math.floor(d/86400),h=Math.floor((d%86400)/3600);return dy>0?`${dy} day${dy>1?'s':''} left`:`${h} hour${h>1?'s':''} left`;}
+function fd(ts){return new Date(ts*1000).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
+
+async function fetchP(state){
+  const q=`{proposals(first:20,where:{space:"${SPACE}",state:"${state}"},orderBy:"created",orderDirection:desc){id title state body scores scores_total votes start end choices}}`;
+  const r=await fetch(GQL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:q})});
+  return (await r.json()).data.proposals||[];
+}
+
+function renderLists(ps){
+  const sd=document.getElementById('side');
+  const sl=document.getElementById('shtList');
+  sd.innerHTML='<div class="mv-slbl">Proposals</div>';
+  sl.innerHTML='';sidEls=[];shtEls=[];
+  if(!ps.length){
+    sd.innerHTML+='<div style="padding:14px 18px;font-size:12px;color:#505050;">No proposals found.</div>';
+    sl.innerHTML='<div style="padding:14px 18px;font-size:13px;color:#505050;">No proposals found.</div>';
+    document.getElementById('pkLbl').textContent='No proposals';return;
+  }
+  ps.forEach((p,i)=>{
+    const st=p.state==='active'?'Voting open':p.state==='closed'?'Closed':'Pending';
+    const short=p.title.length>44?p.title.slice(0,44)+'...':p.title;
+    // sidebar
+    const el=document.createElement('div');
+    el.className='mv-row'+(i===0?' on':'');
+    el.innerHTML=`<div class="mv-rid">${sid(p.id)}</div><div class="mv-rt">${p.title}</div><div class="mv-rst ${p.state}">${st}</div>`;
+    el.onclick=()=>pick(p,i);
+    document.getElementById('side').appendChild(el);
+    sidEls.push(el);
+    // sheet
+    const sel=document.createElement('div');
+    sel.className='sht-row'+(i===0?' on':'');
+    sel.innerHTML=`<div class="sht-id">${sid(p.id)}</div><div class="sht-t">${p.title}</div><div class="sht-st ${p.state}">${st}</div>`;
+    sel.onclick=()=>{pick(p,i);closeSht();};
+    document.getElementById('shtList').appendChild(sel);
+    shtEls.push(sel);
+    if(i===0)document.getElementById('pkLbl').textContent=short;
+  });
+}
+
+function pick(p,i){
+  cur=p;hist=[];
+  sidEls.forEach((e,j)=>e.classList.toggle('on',j===i));
+  shtEls.forEach((e,j)=>e.classList.toggle('on',j===i));
+  document.getElementById('pkLbl').textContent=p.title.length>44?p.title.slice(0,44)+'...':p.title;
+  renderMain(p);
+  document.getElementById('main').scrollTop=0;
+}
+
+function renderMain(p){
+  const sc=p.scores||[],tot=sc.reduce((a,b)=>a+(b||0),0)||1;
+  const fp=Math.round((sc[0]||0)/tot*100),ap=Math.round((sc[1]||0)/tot*100);
+  document.getElementById('main').innerHTML=`
+    <div><div class="mv-pid">${sid(p.id)} · ${p.state}</div><div class="mv-ptitle">${p.title}</div></div>
+    <div class="mv-div"></div>
+    <div><div class="mv-lbl">AI breakdown</div>
+      <div class="mv-gen" id="aiG"><div class="mv-dots"><div class="mv-d"></div><div class="mv-d"></div><div class="mv-d"></div></div><span>Analyzing proposal...</span></div>
+      <div class="mv-txt" id="aiS" style="display:none"></div>
+    </div>
+    <div class="mv-stakes" id="aiSt" style="display:none">
+      <div><div class="mv-slb mv-fc">If it passes</div><div class="mv-stxt" id="aiF"></div></div>
+      <div><div class="mv-slb mv-ac">If it fails</div><div class="mv-stxt" id="aiA"></div></div>
+    </div>
+    <div class="mv-div"></div>
+    <div>
+      <div class="mv-vlbl">Current vote</div>
+      <div class="mv-bar"><div class="mv-barf" style="width:${fp}%"></div></div>
+      <div class="mv-bnum"><span class="mv-bf">For ${fp}%</span><span class="mv-ba">Against ${ap}%</span></div>
+      <div class="mv-bt">${p.state==='active'?tl(p.end):'Ended '+fd(p.end)}</div>
+      <div class="mv-bv">${(p.votes||0).toLocaleString()} votes cast</div>
+    </div>
+    <div class="mv-acts">
+      <button class="mv-vbtn" onclick="window.open('https://snapshot.org/#/bitdao.eth/proposal/${p.id}','_blank')">Vote on Snapshot</button>
+      <button class="mv-abtn" onclick="togChat()">Ask AI a question</button>
+    </div>
+    <div class="mv-chat" id="mvChat">
+      <div class="mv-cmsgs" id="cM"></div>
+      <div class="mv-crow">
+        <input class="mv-ci" id="cI" placeholder="Ask anything about this proposal..." onkeydown="if(event.key==='Enter')doChat()"/>
+        <button class="mv-cs" id="cB" onclick="doChat()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" fill="white" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>`;
+  doAI(p);
+}
+
+async function doAI(p){
+  const body=strip(p.body||'').slice(0,1800);
+  try{
+    const r=await fetch(API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-3-5-haiku-20241022',max_tokens:500,
+        system:'Output ONLY a JSON object with keys summary, forText, againstText. No other text.',
+        messages:[{role:'user',content:`Governance proposal:\nTitle: ${p.title}\nBody: ${body}\n\nJSON response:`}]
+      })
+    });
+    const d=await r.json();
+    const raw=(d.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('').trim();
+    let parsed=null;
+    try{parsed=JSON.parse(raw);}catch(e){const m=raw.match(/\{[\s\S]*\}/);if(m)try{parsed=JSON.parse(m[0]);}catch(e2){}}
+    if(parsed&&parsed.summary){
+      document.getElementById('aiG').style.display='none';
+      const s=document.getElementById('aiS');s.style.display='block';s.textContent=parsed.summary.replace(/--/g,'-');
+      document.getElementById('aiSt').style.display='grid';
+      document.getElementById('aiF').textContent=parsed.forText.replace(/--/g,'-');
+      document.getElementById('aiA').textContent=parsed.againstText.replace(/--/g,'-');
+    }else throw new Error('bad');
+  }catch(e){
+    const g=document.getElementById('aiG');
+    if(g)g.innerHTML='<span style="color:#505050;font-size:12px;">AI unavailable - check API key</span>';
+    const s=document.getElementById('aiS');
+    if(s){s.style.display='block';s.textContent=strip(p.body||'').slice(0,260)||'No description.';}
+  }
+}
+
+function togChat(){const c=document.getElementById('mvChat');if(!c)return;c.classList.toggle('on');if(c.classList.contains('on'))document.getElementById('cI').focus();}
+
+function addM(type,html){const m=document.getElementById('cM');if(!m)return null;const d=document.createElement('div');d.className=type==='u'?'mv-cu':'mv-ca';d.innerHTML=html;m.appendChild(d);m.scrollTop=m.scrollHeight;return d;}
+
+async function doChat(){
+  const i=document.getElementById('cI'),b=document.getElementById('cB');
+  if(!i||!cur)return;const q=i.value.trim();if(!q)return;
+  i.value='';b.disabled=true;hist.push({role:'user',content:q});addM('u',q);
+  const t=addM('a','<div class="mv-cal">Verdict AI</div><div class="mv-cdots"><span></span><span></span><span></span></div>');
+  try{
+    const r=await fetch(API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-3-5-haiku-20241022',max_tokens:400,
+        system:`You are Verdict AI. Answer questions about: "${cur.title}". Context: ${strip(cur.body||'').slice(0,600)}. 2-4 plain sentences. No markdown.`,
+        messages:hist
+      })
+    });
+    const d=await r.json();if(t)t.remove();
+    const txt=(d.content||[]).filter(b=>b.type==='text').map(b=>b.text).join(' ').replace(/--/g,'-');
+    hist.push({role:'assistant',content:txt});addM('a',`<div class="mv-cal">Verdict AI</div>${txt}`);
+  }catch(e){if(t)t.remove();addM('a','<div class="mv-cal">Verdict AI</div>Connection error. Try again.');hist.pop();}
+  b.disabled=false;
+}
+
+async function go(state,el){
+  document.querySelectorAll('.mv-tab').forEach(t=>t.classList.remove('on'));el.classList.add('on');
+  await load(state);
+}
+
+async function load(state){
+  document.getElementById('side').innerHTML=`<div class="mv-slbl">Proposals</div><div class="mv-sk"><div class="mv-skb mv-ski"></div><div class="mv-skb mv-skt"></div><div class="mv-skb mv-skt2"></div><div class="mv-skb mv-sks"></div></div><div class="mv-sk"><div class="mv-skb mv-ski"></div><div class="mv-skb mv-skt"></div><div class="mv-skb mv-skt2"></div><div class="mv-skb mv-sks"></div></div>`;
+  document.getElementById('pkLbl').textContent='Loading...';
+  document.getElementById('main').innerHTML=`<div class="mv-spin"><div class="mv-dots"><div class="mv-d"></div><div class="mv-d"></div><div class="mv-d"></div></div><span>Fetching ${state} proposals...</span></div>`;
+  try{
+    props=await fetchP(state);renderLists(props);
+    if(props.length)pick(props[0],0);
+    else document.getElementById('main').innerHTML=`<div class="mv-empty"><div style="font-size:28px">🗳</div><div>No ${state} proposals right now.</div><div style="font-size:11px;color:#404040;margin-top:4px;">Switch tabs or check back soon.</div></div>`;
+  }catch(e){
+    document.getElementById('main').innerHTML=`<div class="mv-err"><div style="font-size:28px">⚠</div><div>Could not load proposals.</div><button class="mv-retry" onclick="load('${state}')">Retry</button></div>`;
+  }
+}
+load('active');
+
+</script>
+</body>
+</html>
