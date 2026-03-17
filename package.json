@@ -1,0 +1,16 @@
+{
+  "name": "mantle-verdict",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Mantle Verdict - Snapshot proposal viewer with AI breakdown + chat",
+  "main": "public/index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vercel": "^41.7.2"
+  }
+}
+
